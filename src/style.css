@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+.transition-custom {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.app-button {
+  @apply p-1 rounded-full transition-custom hover:bg-[#FFFFFF1D];
+}
+
+.dark-hover {
+  @apply cursor-pointer hover:bg-[#FFFFFF1D];
+}
