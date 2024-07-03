@@ -6,9 +6,10 @@
       @toggle-app-settings="toggleCommandBar"
     />
     <ChatWindow :navOpen="navOpen" @toggle-panel="togglePanel" />
-    <MessageAll
-      :messageAllOpen="messageAllOpen"
+    <MessageBar
+      :messageBarOpen="messageBarOpen"
       @toggle-app-settings="toggleCommandBar"
+      @concurrent-message="submitConcurrentMessage"
     />
   </div>
 </template>
@@ -16,13 +17,13 @@
 <script>
 import Chats from "./components/Chats.vue";
 import ChatWindow from "./components/ChatWindow.vue";
-import MessageAll from "./components/MessageAll.vue";
+import MessageBar from "./components/MessageBar.vue";
 export default {
   name: "App",
   components: {
     Chats,
     ChatWindow,
-    MessageAll,
+    MessageBar,
   },
   props: {},
   data() {
@@ -38,15 +39,13 @@ export default {
         time: "2:30 PM",
       },
       navOpen: true,
-      messageAllOpen: false,
-      settings: {},
+      messageBarOpen: false,
     };
   },
   computed: {},
   methods: {
     togglePanel() {
       this.navOpen = !this.navOpen;
-      console.log(this.navOpen);
     },
 
     handleKeyDown(event) {
@@ -58,7 +57,11 @@ export default {
     },
 
     toggleCommandBar() {
-      this.messageAllOpen = !this.messageAllOpen;
+      this.messageBarOpen = !this.messageBarOpen;
+    },
+
+    submitConcurrentMessage(message) {
+      console.log("app level", message);
     },
   },
   mounted() {

@@ -43,9 +43,7 @@ export default {
   },
   computed: {},
   methods: {},
-  mounted() {
-    console.log(this.index, this.index * 10);
-  },
+  mounted() {},
 };
 </script>
 
