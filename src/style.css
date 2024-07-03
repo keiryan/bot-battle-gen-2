@@ -10,10 +10,14 @@
   @apply transition-all duration-300 ease-in-out;
 }
 
+.chat-transition {
+  @apply transition-[opacity,transform] duration-300 ease-in-out;
+}
+
 .app-button {
   @apply p-1 rounded-full transition-custom hover:bg-[#FFFFFF1D];
 }
 
 .dark-hover {
-  @apply cursor-pointer hover:bg-[#FFFFFF1D];
+  @apply cursor-pointer transition-custom hover:bg-[#FFFFFF1D];
 }

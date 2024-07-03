@@ -1,18 +1,28 @@
 <template>
   <div class="w-screen h-screen flex text-white">
-    <Chats @toggle-panel="togglePanel" :navOpen="navOpen" />
+    <Chats
+      @toggle-panel="togglePanel"
+      :navOpen="navOpen"
+      @toggle-app-settings="toggleCommandBar"
+    />
     <ChatWindow :navOpen="navOpen" @toggle-panel="togglePanel" />
+    <MessageAll
+      :messageAllOpen="messageAllOpen"
+      @toggle-app-settings="toggleCommandBar"
+    />
   </div>
 </template>
 
 <script>
 import Chats from "./components/Chats.vue";
 import ChatWindow from "./components/ChatWindow.vue";
+import MessageAll from "./components/MessageAll.vue";
 export default {
   name: "App",
   components: {
     Chats,
     ChatWindow,
+    MessageAll,
   },
   props: {},
   data() {
@@ -28,6 +38,8 @@ export default {
         time: "2:30 PM",
       },
       navOpen: true,
+      messageAllOpen: false,
+      settings: {},
     };
   },
   computed: {},
@@ -36,8 +48,26 @@ export default {
       this.navOpen = !this.navOpen;
       console.log(this.navOpen);
     },
+
+    handleKeyDown(event) {
+      if (event.metaKey && event.key === "k") {
+        // Command + K
+        event.preventDefault();
+        this.toggleCommandBar();
+      }
+    },
+
+    toggleCommandBar() {
+      this.messageAllOpen = !this.messageAllOpen;
+    },
   },
-  mounted() {},
+  mounted() {
+    window.addEventListener("keydown", this.handleKeyDown);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.handleKeyDown);
+  },
   created() {},
   updated() {},
   destroyed() {},

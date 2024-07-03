@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex-[2] bg-[#171717] transition-custom overflow-hidden"
+    class="flex-[2] bg-[#171717] transition-custom overflow-y-scroll overflow-x-hidden no-scrollbar"
     :class="navOpen ? 'max-w-[18rem]' : 'max-w-0'"
   >
     <div class="flex flex-col">
@@ -11,7 +11,8 @@
           </button>
         </div>
         <div class="flex gap-2">
-          <button class="app-button">
+            <!-- If clicked emit to app component -->
+          <button class="app-button" @click="$emit('toggle-app-settings')">
             <Settings2 size="20" />
           </button>
           <button class="app-button">
@@ -20,7 +21,13 @@
         </div>
       </nav>
       <div class="flex flex-col gap-1 mt-4">
-        <Chat v-for="chat in chats" :key="chat.id" :chat="chat" />
+        <Chat
+          v-for="(chat, index) in chats"
+          :key="chat.id"
+          :chat="chat"
+          :index="index + 1"
+          :navOpen="navOpen"
+        />
       </div>
     </div>
   </div>
@@ -40,28 +47,16 @@ export default {
   },
   data() {
     return {
-      chats: [
-        {
-          id: Math.random(),
-          messages: [],
-          title: "Chat with John Doe",
-          assistant: {
-            name: "John Doe",
-            avatar: "https://randomuser.me/api/portraits",
-          },
-          creationDate: "2:30 PM",
+      chats: new Array(16).fill({
+        id: Math.random(),
+        messages: [],
+        title: "Chat with Jane Doe",
+        assistant: {
+          name: "Jane Doe",
+          avatar: "https://randomuser.me/api/portraits",
         },
-        {
-          id: Math.random(),
-          messages: [],
-          title: "Chat with Jane Doe",
-          assistant: {
-            name: "Jane Doe",
-            avatar: "https://randomuser.me/api/portraits",
-          },
-          creationDate: "2:30 PM",
-        },
-      ],
+        creationDate: "2:30 PM",
+      }),
     };
   },
   methods: {
@@ -77,4 +72,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  display: none;
+}
+</style>
