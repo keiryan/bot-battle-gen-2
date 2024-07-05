@@ -6,13 +6,10 @@
     "
   >
     <!-- Background blur -->
-    <div
-      class="w-full h-full absolute top-0 left-0 backdrop-blur backdrop-brightness-[0.20] hover:cursor-pointer"
-      @click="$emit('toggle-app-settings')"
-    />
+    <div class="background-blur" @click="$emit('toggle-app-settings')" />
     <div class="w-full max-w-screen-sm z-50">
       <div class="flex items-center">
-        <div
+        <!-- <div
           class="flex items-center cursor-pointer bg-[#060606FF] rounded-full border border-[#282828] overflow-hidden"
           :class="
             settingsOpen ? 'w-0 opacity-0 pointer-events-none' : 'p-2 mr-2'
@@ -24,7 +21,7 @@
             class="transition-all duration-300 ease-in-out opacity-50 hover:opacity-100"
             :class="settingsOpen && '-translate-x-52'"
           />
-        </div>
+        </div> -->
         <form
           class="flex flex-1 gap-2 bg-[#060606FF] p-2 px-3 rounded-full border border-[#282828]"
           @submit="submitConcurrentMessage"
@@ -67,7 +64,6 @@ export default {
   },
   computed: {},
   methods: {
-
     submitConcurrentMessage(e) {
       e.preventDefault();
       this.$emit("concurrent-message", this.message);
