@@ -4,6 +4,8 @@ export default {
       lightMode: true,
       reduceMotion: false,
       autoCloseMessageBar: true,
+      username: 'John Doe',
+      chatGPTToken: '',
     };
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex-[2] bg-[#171717] transition-custom overflow-y-scroll overflow-x-hidden no-scrollbar"
+    class="flex-[2] dark-accent transition-custom overflow-y-scroll overflow-x-hidden no-scrollbar"
     :class="navOpen ? 'max-w-[18rem]' : 'max-w-0'"
   >
     <div class="flex flex-col">

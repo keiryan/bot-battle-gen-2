@@ -3,13 +3,17 @@
     <Chats
       @toggle-panel="togglePanel"
       :navOpen="navOpen"
-      @toggle-app-settings="toggleCommandBar"
+      @toggle-app-settings="toggleSettings"
     />
     <ChatWindow :navOpen="navOpen" @toggle-panel="togglePanel" />
     <MessageBar
       :messageBarOpen="messageBarOpen"
       @toggle-app-settings="toggleCommandBar"
       @concurrent-message="submitConcurrentMessage"
+    />
+    <Settings
+      :settingsOpen="settingsOpen"
+      @toggle-app-settings="toggleSettings"
     />
   </div>
 </template>
@@ -18,12 +22,14 @@
 import Chats from "./components/Chats.vue";
 import ChatWindow from "./components/ChatWindow.vue";
 import MessageBar from "./components/MessageBar.vue";
+import Settings from "./components/Settings.vue";
 export default {
   name: "App",
   components: {
     Chats,
     ChatWindow,
     MessageBar,
+    Settings,
   },
   props: {},
   data() {
@@ -40,6 +46,7 @@ export default {
       },
       navOpen: true,
       messageBarOpen: false,
+      settingsOpen: false,
     };
   },
   computed: {},
@@ -58,6 +65,10 @@ export default {
 
     toggleCommandBar() {
       this.messageBarOpen = !this.messageBarOpen;
+    },
+
+    toggleSettings() {
+      this.settingsOpen = !this.settingsOpen;
     },
 
     submitConcurrentMessage(message) {

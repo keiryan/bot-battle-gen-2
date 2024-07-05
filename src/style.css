@@ -21,3 +21,11 @@
 .dark-hover {
   @apply cursor-pointer transition-custom hover:bg-[#FFFFFF1D];
 }
+
+.dark-accent {
+  @apply bg-[#171717];
+}
+
+.background-blur {
+  @apply w-full h-full absolute top-0 left-0 backdrop-blur backdrop-brightness-[0.20] hover:cursor-pointer;
+}
