@@ -20,7 +20,12 @@
           />
         </ul>
       </aside>
-      <section class="flex-[3] dark-accent"></section>
+      <section class="flex-[3] dark-accent py-4 px-2">
+        <div class="flex justify-between items-center">
+            <div>Auto close sidebar</div>
+            <Toggle />
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -29,10 +34,12 @@
 
 <script>
 import AppSettingsListOption from "./AppSettingsListOption.vue";
+import Toggle from "./Toggle.vue";
 export default {
   name: "Settings",
   components: {
     AppSettingsListOption,
+    Toggle,
   },
   props: {
     settingsOpen: Boolean,

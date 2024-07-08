@@ -1,5 +1,5 @@
 <template>
-  <div :class="['text-sm', { 'font-mono': !transitionComplete }]">
+  <div class="text-sm font-mono">
     <span
       v-for="(char, index) in displayText"
       :key="index"

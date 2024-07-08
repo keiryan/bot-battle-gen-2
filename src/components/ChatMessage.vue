@@ -2,7 +2,7 @@
   <li
     class="w-full flex"
     :class="message.sender === 'user' && 'justify-end'"
-    :style="[messageStyle, { paddingTop: noPadding ? '0.3rem' : '2rem' }]"
+    :style="[messageStyle, { paddingTop: noPadding ? '0.1rem' : '2rem' }]"
   >
     <div
       class="bg-[#2C93FF] w-fit py-1 px-3 rounded-full"

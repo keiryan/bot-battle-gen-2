@@ -4,6 +4,7 @@
       @toggle-panel="togglePanel"
       :navOpen="navOpen"
       @toggle-app-settings="toggleSettings"
+      @create-new-chat="createNewChat"
     />
     <ChatWindow :navOpen="navOpen" @toggle-panel="togglePanel" />
     <MessageBar
@@ -73,6 +74,27 @@ export default {
 
     submitConcurrentMessage(message) {
       console.log("app level", message);
+    },
+
+    createNewChat(chatType) {
+      console.log("create new chat");
+      // Create a new chat, write it to local storage, and update the state
+      // localStorage.setItem(
+      //   "chats",
+      //   JSON.stringify([
+      //     ...JSON.parse(localStorage.getItem("chats")),
+      //     {
+      //       id: Math.random(),
+      //       messages: [],
+      //       title: "Chat with Jane Doe",
+      //       assistant: {
+      //         name: "Jane Doe",
+      //         avatar: "https://randomuser.me/api/portraits",
+      //       },
+      //       time: "2:30 PM",
+      //     },
+      //   ])
+      // );
     },
   },
   mounted() {

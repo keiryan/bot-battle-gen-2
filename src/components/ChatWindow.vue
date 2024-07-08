@@ -55,6 +55,7 @@ import { ref, defineProps } from "vue";
 
 const props = defineProps({
   navOpen: Boolean,
+  chatId: Number,
 });
 
 const chat = ref({
@@ -95,7 +96,6 @@ const submitMessage = (message) => {
     content: message,
   });
 };
-
 </script>
 
 <style scoped>

@@ -11,37 +11,62 @@
           </button>
         </div>
         <div class="flex gap-2">
-            <!-- If clicked emit to app component -->
+          <!-- If clicked emit to app component -->
           <button class="app-button" @click="$emit('toggle-app-settings')">
             <Settings2 size="20" />
           </button>
-          <button class="app-button">
+          <button class=" flex items-center justify-center" @click="createNewChat">
             <Plus size="20" />
           </button>
         </div>
       </nav>
-      <div class="flex flex-col gap-1 mt-4">
-        <Chat
-          v-for="(chat, index) in chats"
-          :key="chat.id"
-          :chat="chat"
-          :index="index + 1"
-          :navOpen="navOpen"
-        />
+      <!-- Add chat -->
+      <!-- <div
+        class="transition-custom"
+        :class="creatingNewChat ? '' : '-translate-x-96'"
+      >
+        This is new
+      </div> -->
+      <div class="relative mt-4">
+        <div
+          class="flex flex-col gap-1 absolute top-0 left-0 transition-custom"
+          :class="creatingNewChat ? '-left-64' : 'left-0'"
+        >
+          <Chat
+            v-for="(chat, index) in chats"
+            :key="chat.id"
+            :chat="chat"
+            :index="index + 1"
+            :navOpen="navOpen === true && creatingNewChat === false"
+          />
+        </div>
+        <div
+          class="absolute transition-custom px-4 w-full"
+          :class="creatingNewChat ? 'left-0' : 'left-full'"
+        >
+          <Dropdown
+            title="Chat type"
+            :options="[{ name: 'ChatGPT', value: 'chatgpt' }]"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { Settings2, Plus, PanelLeftClose } from "lucide-vue-next";
+import { Settings2, PanelLeftClose } from "lucide-vue-next";
 </script>
 
 <script>
 import Chat from "./Chat.vue";
+import Dropdown from "./Dropdown.vue";
+import Plus from "./Plus.vue";
 export default {
   name: "Chats",
-  components: {},
+  components: {
+    Dropdown,
+  },
   props: {
     navOpen: Boolean,
   },
@@ -57,11 +82,16 @@ export default {
         },
         creationDate: "2:30 PM",
       }),
+      creatingNewChat: false,
     };
   },
   methods: {
     togglePanel() {
       this.$emit("toggle-panel");
+    },
+
+    createNewChat() {
+      this.creatingNewChat = !this.creatingNewChat;
     },
   },
   computed: {},
