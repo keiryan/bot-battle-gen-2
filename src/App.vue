@@ -4,8 +4,15 @@
       @toggle-panel="togglePanel"
       :navOpen="navOpen"
       @toggle-app-settings="toggleSettings"
+      @create-new-chat="createNewChat"
+      :chats="chats"
+      @update-current-chat="updateCurrentChat"
     />
-    <ChatWindow :navOpen="navOpen" @toggle-panel="togglePanel" />
+    <ChatWindow
+      :navOpen="navOpen"
+      @toggle-panel="togglePanel"
+      :chat="currentChat"
+    />
     <MessageBar
       :messageBarOpen="messageBarOpen"
       @toggle-app-settings="toggleCommandBar"
@@ -23,6 +30,30 @@ import Chats from "./components/Chats.vue";
 import ChatWindow from "./components/ChatWindow.vue";
 import MessageBar from "./components/MessageBar.vue";
 import Settings from "./components/Settings.vue";
+
+const localChats = () => {
+  const chats = localStorage.getItem("chats");
+
+  if (chats) {
+    return [...JSON.parse(localStorage.getItem("chats"))].sort(
+      (a, b) => b.creationDate - a.creationDate
+    );
+  } else {
+    const defaultChat = {
+      id: Math.random(),
+      messages: [],
+      title: "ChatGPT",
+      assistant: {
+        name: "ChatGPT",
+        avatar: "https://randomuser.me/api/portraits",
+      },
+      creationDate: Date.now(),
+    };
+    localStorage.setItem("chats", JSON.stringify([defaultChat]));
+    return [defaultChat];
+  }
+};
+
 export default {
   name: "App",
   components: {
@@ -34,19 +65,12 @@ export default {
   props: {},
   data() {
     return {
-      currentChat: {
-        id: Math.random(),
-        messages: [],
-        title: "Chat with John Doe",
-        assistant: {
-          name: "John Doe",
-          avatar: "https://randomuser.me/api/portraits",
-        },
-        time: "2:30 PM",
-      },
+      // Latest chat
+      currentChat: localChats().at(-1),
       navOpen: true,
       messageBarOpen: false,
       settingsOpen: false,
+      chats: localChats(),
     };
   },
   computed: {},
@@ -73,6 +97,22 @@ export default {
 
     submitConcurrentMessage(message) {
       console.log("app level", message);
+    },
+
+    createNewChat(passedChat) {
+      this.currentChat = passedChat;
+
+      this.chats = [...this.chats, passedChat].sort(
+        (a, b) => b.creationDate - a.creationDate
+      );
+      localStorage.setItem("chats", JSON.stringify(this.chats));
+    },
+
+    updateCurrentChat(chat) {
+      this.currentChat = chat;
+      if (this.$settings.autoCloseMessageBar) {
+        this.navOpen = false;
+      }
     },
   },
   mounted() {

@@ -9,19 +9,6 @@
     <div class="background-blur" @click="$emit('toggle-app-settings')" />
     <div class="w-full max-w-screen-sm z-50">
       <div class="flex items-center">
-        <!-- <div
-          class="flex items-center cursor-pointer bg-[#060606FF] rounded-full border border-[#282828] overflow-hidden"
-          :class="
-            settingsOpen ? 'w-0 opacity-0 pointer-events-none' : 'p-2 mr-2'
-          "
-          @click="$emit('toggle-app-settings')"
-        >
-          <Settings2
-            size="20"
-            class="transition-all duration-300 ease-in-out opacity-50 hover:opacity-100"
-            :class="settingsOpen && '-translate-x-52'"
-          />
-        </div> -->
         <form
           class="flex flex-1 gap-2 bg-[#060606FF] p-2 px-3 rounded-full border border-[#282828]"
           @submit="submitConcurrentMessage"
@@ -35,7 +22,8 @@
             placeholder="Message concurrent chats..."
           />
           <div
-            class="transition-all duration-300 ease-in-out opacity-50 hover:opacity-100 cursor-pointer"
+            class="transition-all duration-300 ease-in-out cursor-pointer"
+            :class="message.length > 0 ? 'opacity-100' : 'pointer-events-none opacity-50'"
           >
             <Search @click="submitConcurrentMessage" />
           </div>
@@ -66,11 +54,12 @@ export default {
   methods: {
     submitConcurrentMessage(e) {
       e.preventDefault();
-      this.$emit("concurrent-message", this.message);
-      this.message = "";
-
-      if (this.$settings.autoCloseMessageBar) {
-        this.$emit("toggle-app-settings");
+      if (this.message.trim().length > 0) {
+        this.$emit("concurrent-message", this.message);
+        this.message = "";
+        if (this.$settings.autoCloseMessageBar) {
+          this.$emit("toggle-app-settings");
+        }
       }
     },
   },
