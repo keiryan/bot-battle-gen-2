@@ -22,12 +22,14 @@
     </div>
 
     <div class="">
-      {{ chat.creationDate }}
+      {{ formatDate(chat.creationDate) }}
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import formatDate from "../utils/formatDate.js";
+</script>
 
 <script>
 export default {

@@ -18,16 +18,18 @@
 export default {
   name: "Plus",
   components: {},
-  props: {},
+  props: {
+    toggled: Boolean,
+  },
   data() {
     return {
-      toggled: false,
+      //   toggled: false,
     };
   },
   computed: {},
   methods: {
     toggle() {
-      this.toggled = !this.toggled;
+      //   this.toggled = !this.toggled;
       this.$emit("toggled");
     },
   },

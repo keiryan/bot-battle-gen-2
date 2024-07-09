@@ -2,11 +2,12 @@
   <div
     class="relative w-full flex flex-col cursor-pointer no-highlight transition-custom"
     @click="toggleDropdown"
+    ref="dropdownRef"
   >
     <div
       class="p-2 border border-[#303030] dark-shadow w-full flex justify-between items-center rounded"
     >
-      <div>{{ title }}</div>
+      <div>{{ currentlySelectedValue ?? title }}</div>
       <ChevronUp
         size="20"
         class="transition-custom"
@@ -14,8 +15,8 @@
       />
     </div>
     <ul
-      class="absolute top-12 left-0 w-full dark-shadow bg-[#1E1E1E7C] border border-[#303030] drop-shadow-lg rounded transition-custom overflow-hidden backdrop-blur-sm p-1"
-      :class="isOpen ? '' : '-translate-y-2 opacity-0'"
+      class="absolute top-12 left-0 w-full dark-shadow bg-[#0E0E0ECB] border border-[#303030] drop-shadow-lg rounded transition-custom overflow-hidden backdrop-blur p-1 z-[999]"
+      :class="isOpen ? '' : '-translate-y-2 opacity-0 pointer-events-none'"
     >
       <li
         class="p-2 hover-bg-glow hover:bg-[#FB562238] rounded transition-custom"
@@ -23,6 +24,7 @@
         :key="index"
         @mousemove="handleMouseMove($event, index)"
         @mouseleave="handleMouseLeave(index)"
+        @click="setSelection(item)"
       >
         {{ item.name }}
         <span class="glow blur-md" :style="item.glowStyle"></span>
@@ -33,7 +35,9 @@
 
 <script setup>
 import { ChevronUp } from "lucide-vue-next";
-import { ref } from "vue";
+import { ref, watch, defineEmits, onUnmounted, onMounted } from "vue";
+
+const emit = defineEmits(["selected"]);
 
 const props = defineProps({
   title: {
@@ -47,11 +51,20 @@ const props = defineProps({
 });
 
 const isOpen = ref(false);
+const currentlySelectedValue = ref(null);
+const dropdownRef = ref(null);
 // const items = ref(new Array(4).fill({}).map(() => ({ glowStyle: {} })));
-const itemsWithGlow = ref(props.options.map(item => ({ label: item, glowStyle: {} })));
+const itemsWithGlow = ref(
+  props.options.map((item) => ({ label: item, glowStyle: {} }))
+);
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
+};
+
+const setSelection = (item) => {
+  currentlySelectedValue.value = item.name;
+  emit("selected", item);
 };
 
 const handleMouseMove = (event, index) => {
@@ -68,8 +81,22 @@ const handleMouseMove = (event, index) => {
 };
 
 const handleMouseLeave = (index) => {
-    itemsWithGlow.value[index].glowStyle = {};
+  itemsWithGlow.value[index].glowStyle = {};
 };
+
+const handleClickOutside = (event) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+    isOpen.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <style scoped>

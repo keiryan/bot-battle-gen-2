@@ -25,6 +25,7 @@
     </header>
     <!-- Chat Window -->
     <section class="w-full max-w-screen-lg flex flex-col flex-1 p-4">
+      <EmptyConversation v-if="chat.messages.length === 0" />
       <transition-group
         name="list"
         tag="ul"
@@ -51,51 +52,70 @@
 import { PanelLeftClose, Bolt } from "lucide-vue-next";
 import ChatWindowInput from "./ChatWindowInput.vue";
 import ChatMessage from "./ChatMessage.vue";
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch } from "vue";
+import EmptyConversation from "./EmptyConversation.vue";
 
 const props = defineProps({
   navOpen: Boolean,
   chatId: Number,
+  chat: Object,
 });
 
 const chat = ref({
   id: Math.random(),
-  messages: [
-    {
-      id: 1,
-      sender: "user",
-      content: "Hello, how can I help you today?",
-    },
-    {
-      id: 2,
-      sender: "assistant",
-      content: "Hi there! I'm here to help you with anything.",
-      icon: "chatgpt.png",
-    },
-    {
-      id: 3,
-      sender: "user",
-      content: "Woah!",
-    },
-    {
-      id: 4,
-      sender: "assistant",
-      content: "Hi there! I'm here to help you with anything.",
-      icon: "gemini.svg",
-    },
-  ],
+  messages: [],
 });
-
-const initialLength = ref(chat.value.messages.length);
+const emit = defineEmits(["submit-message"]);
+const initialLength = ref(props.chat?.messages?.length);
 const loading = ref(true);
 
 const submitMessage = (message) => {
-  chat.value.messages.push({
-    id: Date.now(),
+  emit("submit-message", {
+    id: Math.random(),
+    time: Date.now(),
     sender: "user",
     content: message,
   });
+
+  // Read array from local storage
+  const chats = JSON.parse(localStorage.getItem("chats")) || [];
+
+  if (chats.length > 0) {
+    // Find the chat with the given ID
+    const chatIndex = chats.findIndex((chat) => {
+      console.log("findIndex", chat.id, props.chat.id);
+      return chat.id === props.chat.id;
+    });
+
+    const newMessage = {
+      id: Math.random(),
+      time: Date.now(),
+      sender: "user",
+      content: message,
+    };
+
+    // Add the message to the chat
+    chats[chatIndex].messages.push(newMessage);
+
+    chat.value.messages.push(newMessage);
+
+    // Update the local storage
+    localStorage.setItem("chats", JSON.stringify(chats));
+  }
 };
+
+watch(
+  () => props.chat,
+  (newValue, oldValue) => {
+    console.log(newValue, oldValue);
+    // if (newValue) {
+    //   initialLength.value = newValue.messages.length;
+    // }
+
+    chat.value.messages = newValue.messages;
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>
