@@ -52,8 +52,12 @@
 import { PanelLeftClose, Bolt } from "lucide-vue-next";
 import ChatWindowInput from "./ChatWindowInput.vue";
 import ChatMessage from "./ChatMessage.vue";
-import { ref, defineProps, watch } from "vue";
+import { ref, defineProps, watch, getCurrentInstance } from "vue";
 import EmptyConversation from "./EmptyConversation.vue";
+import getAssistantResponse from "../utils/getAssistantResponse";
+
+const { appContext } = getCurrentInstance();
+const settings = appContext.config.globalProperties.$settings;
 
 const props = defineProps({
   navOpen: Boolean,
@@ -65,11 +69,11 @@ const chat = ref({
   id: Math.random(),
   messages: [],
 });
-const emit = defineEmits(["submit-message"]);
+const emit = defineEmits(["submit-message", "toggle-panel"]);
 const initialLength = ref(props.chat?.messages?.length);
 const loading = ref(true);
 
-const submitMessage = (message) => {
+const submitMessage = async (message) => {
   emit("submit-message", {
     id: Math.random(),
     time: Date.now(),
@@ -101,6 +105,21 @@ const submitMessage = (message) => {
 
     // Update the local storage
     localStorage.setItem("chats", JSON.stringify(chats));
+    const tokenLegend = {
+      chatgpt: settings.chatGPTToken,
+    };
+    // console.log("chat", {
+    //   ...props.chat,
+    //   token: tokenLegend[props.chat.assistant.name],
+    // });
+    await console.log(
+      "message from chatgpt",
+      getAssistantResponse({
+        messages: chat.value.messages,
+        token: tokenLegend[props.chat.assistant.name],
+        currentModel: props.chat.currentModel,
+      })
+    );
   }
 };
 

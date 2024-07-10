@@ -17,13 +17,33 @@
             v-for="setting in settings"
             :setting="setting"
             :key="setting.id"
+            @click="currentPage = setting.id"
           />
         </ul>
       </aside>
       <section class="flex-[3] dark-accent py-4 px-2">
-        <div class="flex justify-between items-center">
-            <div>Auto close sidebar</div>
-            <Toggle />
+        <!-- General Settings -->
+        <div
+          class="flex justify-between items-center"
+          v-if="currentPage === 'settings'"
+        >
+          <div>Auto close sidebar</div>
+          <Toggle
+            @toggle="handleAutoCloseSidebarToggle($event, 'autoCloseSidebar')"
+            :toggled="autoCloseMessageBar"
+          />
+        </div>
+
+        <!-- ChatGPT Settings -->
+        <div class="" v-if="currentPage === 'chatgpt'">
+          <div>
+            <Input
+              text="ChatGPT API Key"
+              type="sensitive"
+              keyName="ChatGPTAPIKey"
+              default=""
+            />
+          </div>
         </div>
       </section>
     </div>
@@ -34,12 +54,14 @@
 
 <script>
 import AppSettingsListOption from "./AppSettingsListOption.vue";
+import Input from "./Input.vue";
 import Toggle from "./Toggle.vue";
 export default {
   name: "Settings",
   components: {
     AppSettingsListOption,
     Toggle,
+    Input,
   },
   props: {
     settingsOpen: Boolean,
@@ -48,17 +70,17 @@ export default {
     return {
       settings: [
         {
-          id: 1,
+          id: "settings",
           title: "General",
           icon: "bolt",
         },
         {
-          id: 2,
+          id: "chatgpt",
           title: "ChatGPT",
           icon: "bot",
         },
         {
-          id: 3,
+          id: "gemini",
           title: "Gemini",
           icon: "atom",
         },
@@ -73,12 +95,18 @@ export default {
         //   icon: "HelpCircle",
         // },
       ],
-
+      autoCloseMessageBar: this.$settings.autoCloseMessageBar,
       selectedSetting: null,
+      currentPage: "settings",
     };
   },
   computed: {},
-  methods: {},
+  methods: {
+    handleAutoCloseSidebarToggle(event, setting) {
+      this.autoCloseMessageBar = !this.autoCloseMessageBar;
+      this.$settings.autoCloseMessageBar = !this.$settings.autoCloseMessageBar;
+    },
+  },
   mounted() {},
 };
 </script>

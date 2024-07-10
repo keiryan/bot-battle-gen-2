@@ -1,6 +1,6 @@
 <template>
   <div
-    @click="toggle"
+    @click="handleToggle"
     class="w-10 h-6 bg-gray-800 rounded-full relative cursor-pointer transition-colors duration-200 ease-in-out overflow-hidden"
     :class="toggled && 'bg-green-500'"
   >
@@ -14,15 +14,16 @@
 <script>
 export default {
   data() {
-    return {
-      toggled: false,
-    };
+    return {};
+  },
+
+  props: {
+    toggled: Boolean,
   },
 
   methods: {
-    toggle() {
-      this.toggled = !this.toggled;
-      this.$emit("toggled", this.toggled);
+    handleToggle() {
+      this.$emit("toggle");
     },
   },
 };

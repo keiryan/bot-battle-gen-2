@@ -4,8 +4,8 @@ export default {
       lightMode: true,
       reduceMotion: false,
       autoCloseMessageBar: true,
-      username: 'John Doe',
-      chatGPTToken: '',
+      username: "John Doe",
+      chatGPTToken: localStorage.getItem("ChatGPTAPIKey") || "",
     };
   },
 };

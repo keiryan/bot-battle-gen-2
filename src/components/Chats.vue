@@ -124,6 +124,7 @@ export default {
           name: this.selectedChatType?.value,
           avatar: "https://randomuser.me/api/portraits",
         },
+        currentModel: this.selectedChatParams?.value,
         creationDate: Date.now(),
       };
       this.$emit("create-new-chat", newChat);

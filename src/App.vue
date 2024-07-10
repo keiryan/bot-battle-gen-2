@@ -102,6 +102,8 @@ export default {
     createNewChat(passedChat) {
       this.currentChat = passedChat;
 
+      console.log("createNewChat app", passedChat);
+
       this.chats = [...this.chats, passedChat].sort(
         (a, b) => b.creationDate - a.creationDate
       );
