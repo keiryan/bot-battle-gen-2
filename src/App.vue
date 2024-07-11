@@ -30,6 +30,7 @@ import Chats from "./components/Chats.vue";
 import ChatWindow from "./components/ChatWindow.vue";
 import MessageBar from "./components/MessageBar.vue";
 import Settings from "./components/Settings.vue";
+import creationary from "./utils/creationary";
 
 const localChats = () => {
   const chats = localStorage.getItem("chats");
@@ -39,18 +40,9 @@ const localChats = () => {
       (a, b) => b.creationDate - a.creationDate
     );
   } else {
-    const defaultChat = {
-      id: Math.random(),
-      messages: [],
-      title: "ChatGPT",
-      assistant: {
-        name: "ChatGPT",
-        avatar: "https://randomuser.me/api/portraits",
-      },
-      creationDate: Date.now(),
-    };
-    localStorage.setItem("chats", JSON.stringify([defaultChat]));
-    return [defaultChat];
+    const newChat = creationary();
+    localStorage.setItem("chats", JSON.stringify([newChat]));
+    return [newChat];
   }
 };
 
@@ -100,17 +92,20 @@ export default {
     },
 
     createNewChat(passedChat) {
-      this.currentChat = passedChat;
+      // this.currentChat = passedChat;
 
       console.log("createNewChat app", passedChat);
+      console.log("creationary response", creationary(passedChat));
 
-      this.chats = [...this.chats, passedChat].sort(
+      this.chats = [...this.chats, creationary(passedChat)].sort(
         (a, b) => b.creationDate - a.creationDate
       );
       localStorage.setItem("chats", JSON.stringify(this.chats));
+      this.updateCurrentChat(this.chats.at(-1));
     },
 
     updateCurrentChat(chat) {
+      console.log("updateCurrentChat", chat);
       this.currentChat = chat;
       if (this.$settings.autoCloseMessageBar) {
         this.navOpen = false;

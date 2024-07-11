@@ -6,13 +6,13 @@
   >
     <!-- Profile Image -->
     <div
-      class="rounded-full bg-red-500 w-8 h-8 mr-2 overflow-hidden transition-transform"
+      class="rounded-full w-8 h-8 mr-2 overflow-hidden transition-transform"
     >
-      <!-- <img
-          class="w-full rounded-full"
-          :src="chat.assistant.avatar"
-          alt="Profile Image"
-        /> -->
+      <img
+        class="w-full rounded-full"
+        :src="imageGrabber(chat.chatType)"
+        alt="Profile Image"
+      />
     </div>
 
     <!-- Chat title -->
@@ -29,6 +29,7 @@
 
 <script setup>
 import formatDate from "../utils/formatDate.js";
+import imageGrabber from "../utils/imageGrabber.js";
 </script>
 
 <script>

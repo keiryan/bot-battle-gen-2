@@ -12,7 +12,7 @@
     />
     <div
       class="p-1 rounded-full transition-custom hover:bg-[#ffffff20]"
-      :class="message.length === 0 && 'pointer-events-none opacity-25'"
+      :class="message.trim().length === 0 && 'pointer-events-none opacity-25'"
       @click="submitMessage"
     >
       <Forward class="cursor-pointer" />
@@ -38,8 +38,10 @@ export default {
   methods: {
     submitMessage(e) {
       e.preventDefault();
-      this.$emit("submit-message", this.message);
-      this.message = "";
+      if (this.message.trim().length > 0) {
+        this.$emit("submit-message", this.message);
+        this.message = "";
+      }
     },
   },
   mounted() {},

@@ -1,20 +1,27 @@
 export default async function getAssistantResponse(chatParams) {
-  const { messages, currentModel, token } = chatParams;
-  const start = performance.now(); // Start timing before request
-  // const apiKey = localStorage.getItem();
+  console.log("getAssistantResponse params", chatParams);
+  const { messages, currentModel, chatType } = chatParams;
+  const chatTokenLegend = {
+    chatgpt: "ChatGPTAPIKey",
+    gemini: "gemini",
+  };
+
+  const start = performance.now();
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem(
+          chatTokenLegend[chatType]
+        )}`,
       },
       body: JSON.stringify({
         model: currentModel,
         messages: [
           ...messages.map((message) => ({
             role: message.sender === "user" ? "user" : "assistant",
-            content: message.message,
+            content: message.content,
           })),
         ],
       }),
@@ -26,7 +33,7 @@ export default async function getAssistantResponse(chatParams) {
     const timeTaken = ((end - start) / 1000).toFixed(2);
 
     return {
-      message: data,
+      message: data.choices[0].message.content,
       timeTaken,
     };
   } catch (error) {

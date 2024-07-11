@@ -1,6 +1,6 @@
 <template>
   <li
-    class="w-full flex"
+    class="w-full flex wrap break-words gap-2"
     :class="message.sender === 'user' && 'justify-end'"
     :style="[messageStyle, { paddingTop: noPadding ? '0.1rem' : '2rem' }]"
   >
@@ -10,10 +10,10 @@
     >
       {{ message.content }}
     </div>
-    <div v-else class="flex items-center gap-2">
+    <div v-else class="flex gap-2">
       <img
         class="w-8 h-8 rounded-full"
-        :src="getImageUrl(message.icon)"
+        :src="getImageUrl(message.chatType)"
         alt="Profile Image"
       />
       <div class="flex flex-col">
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import getImageUrl from "../utils/imageGrabber.js";
 import BouncyBalls from "./BouncyBalls.vue";
 import BinaryTransition from "./BinaryTransition.vue";
@@ -43,6 +43,15 @@ const props = defineProps({
   index: Number,
   noDelay: Boolean,
   loading: Boolean,
+});
+
+onMounted(() => {
+  //   if (props.loading) {
+  //     setTimeout(() => {
+  //       props.loading = false;
+  //     }, 2000);
+  //   }
+  console.log("Message loaded", props.message);
 });
 
 const messageStyle = computed(() => ({

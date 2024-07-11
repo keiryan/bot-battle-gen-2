@@ -52,7 +52,7 @@
 import { PanelLeftClose, Bolt } from "lucide-vue-next";
 import ChatWindowInput from "./ChatWindowInput.vue";
 import ChatMessage from "./ChatMessage.vue";
-import { ref, defineProps, watch, getCurrentInstance } from "vue";
+import { ref, defineProps, watch, getCurrentInstance, onMounted } from "vue";
 import EmptyConversation from "./EmptyConversation.vue";
 import getAssistantResponse from "../utils/getAssistantResponse";
 
@@ -100,33 +100,48 @@ const submitMessage = async (message) => {
 
     // Add the message to the chat
     chats[chatIndex].messages.push(newMessage);
-
     chat.value.messages.push(newMessage);
 
-    // Update the local storage
-    localStorage.setItem("chats", JSON.stringify(chats));
     const tokenLegend = {
       chatgpt: settings.chatGPTToken,
     };
-    // console.log("chat", {
-    //   ...props.chat,
-    //   token: tokenLegend[props.chat.assistant.name],
-    // });
-    await console.log(
-      "message from chatgpt",
-      getAssistantResponse({
-        messages: chat.value.messages,
-        token: tokenLegend[props.chat.assistant.name],
-        currentModel: props.chat.currentModel,
-      })
-    );
+    console.log("chat", {
+      ...props.chat,
+      token: tokenLegend[props.chat.assistant.name],
+    });
+
+    const assistantResponse = await getAssistantResponse({
+      messages: [...chat.value.messages],
+      currentModel: props.chat.model,
+      chatType: props.chat.chatType,
+    });
+
+    const assistantMessage = {
+      content: assistantResponse.message,
+      sender: "assistant",
+      time: Date.now(),
+      id: Math.random(),
+      chatType: props.chat.chatType,
+    };
+
+    // Add assistant's message to chat
+    chats[chatIndex].messages.push(assistantMessage);
+    chat.value.messages.push(assistantMessage);
+
+    // Update the local storage
+    localStorage.setItem("chats", JSON.stringify(chats));
   }
 };
+
+onMounted(() => {
+  // Code to be executed when the component is mounted
+  console.log("Component mounted", props.chat);
+});
 
 watch(
   () => props.chat,
   (newValue, oldValue) => {
-    console.log(newValue, oldValue);
+    console.log("Chat window updated", newValue);
     // if (newValue) {
     //   initialLength.value = newValue.messages.length;
     // }

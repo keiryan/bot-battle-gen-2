@@ -59,7 +59,7 @@
           <Dropdown
             title="Chat Params"
             :options="[
-              { name: 'GPT 3', value: 'gpt-3-turbo' },
+              { name: 'GPT 3.5', value: 'gpt-3.5-turbo-0125' },
               { name: 'GPT 4', value: 'gpt-4-turbo' },
               { name: 'GPT 4o', value: 'gpt-4o' },
             ]"
@@ -116,18 +116,21 @@ export default {
     createNewChat() {
       console.count("createNewChat");
       this.creatingNewChat = !this.creatingNewChat;
-      const newChat = {
-        id: Math.random(),
-        messages: [],
-        title: this.selectedChatParams?.name,
-        assistant: {
-          name: this.selectedChatType?.value,
-          avatar: "https://randomuser.me/api/portraits",
-        },
-        currentModel: this.selectedChatParams?.value,
-        creationDate: Date.now(),
-      };
-      this.$emit("create-new-chat", newChat);
+      //   const newChat = {
+      //     id: Math.random(),
+      //     messages: [],
+      //     title: this.selectedChatParams?.name,
+      //     assistant: {
+      //       name: this.selectedChatType?.value,
+      //       avatar: "https://randomuser.me/api/portraits",
+      //     },
+      //     currentModel: this.selectedChatParams?.value,
+      //     creationDate: Date.now(),
+      //   };
+      this.$emit("create-new-chat", {
+        chatType: this.selectedChatType.value,
+        model: this.selectedChatParams.value,
+      });
 
       console.log("selectedChatType", this.selectedChatType);
 
