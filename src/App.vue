@@ -92,20 +92,16 @@ export default {
     },
 
     createNewChat(passedChat) {
-      // this.currentChat = passedChat;
+      const newChat = creationary(passedChat);
 
-      console.log("createNewChat app", passedChat);
-      console.log("creationary response", creationary(passedChat));
-
-      this.chats = [...this.chats, creationary(passedChat)].sort(
+      this.chats = [...this.chats, newChat].sort(
         (a, b) => b.creationDate - a.creationDate
       );
+      this.updateCurrentChat(newChat);
       localStorage.setItem("chats", JSON.stringify(this.chats));
-      this.updateCurrentChat(this.chats.at(-1));
     },
 
     updateCurrentChat(chat) {
-      console.log("updateCurrentChat", chat);
       this.currentChat = chat;
       if (this.$settings.autoCloseMessageBar) {
         this.navOpen = false;

@@ -141,7 +141,8 @@ onMounted(() => {
 watch(
   () => props.chat,
   (newValue, oldValue) => {
-    console.log("Chat window updated", newValue);
+    console.count("Chat window updated");
+    console.log("Chat window updated", newValue, props.chat);
     // if (newValue) {
     //   initialLength.value = newValue.messages.length;
     // }

@@ -24,6 +24,7 @@
             v-else
             :targetText="message.content"
             :index="index"
+            :transitionSpeed="(20 / message.content.length) * 50"
           />
         </div>
       </div>
